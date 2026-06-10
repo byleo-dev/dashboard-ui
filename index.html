@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard — Arcen Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f1117;
+  --bg2:#161b27;
+  --bg3:#1c2333;
+  --border:#ffffff0f;
+  --border2:#ffffff1a;
+  --white:#f0f2f8;
+  --white2:#9ca3b8;
+  --muted:#5a6278;
+  --blue:#4f7cff;
+  --blue2:#3d6bef;
+  --green:#22c55e;
+  --red:#ef4444;
+  --yellow:#f59e0b;
+  --purple:#a855f7;
+  --sans:'Inter',system-ui,sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);font-size:14px;display:flex;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:220px;flex-shrink:0;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  padding:24px 0;
+  position:fixed;top:0;left:0;bottom:0;
+}
+.sidebar-logo{
+  padding:0 20px 28px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:16px;
+}
+.sidebar-logo span{
+  font-size:1rem;font-weight:600;
+  letter-spacing:.5px;color:var(--white);
+}
+.sidebar-logo small{
+  display:block;font-size:.68rem;
+  color:var(--muted);margin-top:2px;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.nav-section{
+  padding:0 12px;margin-bottom:24px;
+}
+.nav-label{
+  font-size:.6rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);padding:0 8px;margin-bottom:8px;display:block;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:6px;
+  color:var(--white2);text-decoration:none;
+  font-size:.82rem;font-weight:400;
+  transition:all .2s;cursor:pointer;
+  margin-bottom:2px;
+}
+.nav-item:hover{background:var(--bg3);color:var(--white);}
+.nav-item.active{background:rgba(79,124,255,.12);color:var(--blue);}
+.nav-item svg{flex-shrink:0;opacity:.7;}
+.nav-item.active svg{opacity:1;}
+.nav-badge{
+  margin-left:auto;background:var(--blue);
+  color:#fff;font-size:.6rem;font-weight:600;
+  padding:2px 7px;border-radius:20px;
+}
+.sidebar-footer{
+  margin-top:auto;padding:16px 20px 0;
+  border-top:1px solid var(--border);
+}
+.user-row{display:flex;align-items:center;gap:10px;}
+.user-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:600;color:#fff;flex-shrink:0;
+}
+.user-name{font-size:.8rem;font-weight:500;color:var(--white);}
+.user-role{font-size:.68rem;color:var(--muted);}
+
+/* ── MAIN ── */
+.main{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 32px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+  position:sticky;top:0;z-index:10;
+}
+.topbar-left h1{font-size:1rem;font-weight:600;color:var(--white);}
+.topbar-left p{font-size:.75rem;color:var(--muted);margin-top:1px;}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.topbar-btn{
+  display:flex;align-items:center;gap:7px;
+  background:var(--bg3);border:1px solid var(--border2);
+  color:var(--white2);padding:7px 14px;border-radius:6px;
+  font-size:.75rem;font-weight:500;cursor:pointer;
+  transition:all .2s;font-family:var(--sans);
+}
+.topbar-btn:hover{border-color:var(--border2);color:var(--white);}
+.btn-primary{
+  background:var(--blue);border-color:var(--blue);
+  color:#fff;
+}
+.btn-primary:hover{background:var(--blue2);border-color:var(--blue2);color:#fff;}
+.notif-btn{
+  width:34px;height:34px;border-radius:6px;
+  background:var(--bg3);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;position:relative;
+}
+.notif-dot{
+  position:absolute;top:7px;right:7px;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--red);border:1.5px solid var(--bg);
+}
+
+/* ── CONTENT ── */
+.content{padding:28px 32px;flex:1;}
+
+/* ── STATS GRID ── */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:24px;
+}
+.stat-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:20px 22px;
+  transition:border-color .2s;
+}
+.stat-card:hover{border-color:var(--border2);}
+.stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.stat-label{font-size:.72rem;color:var(--muted);font-weight:500;letter-spacing:.3px;}
+.stat-icon{
+  width:30px;height:30px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+}
+.stat-num{font-size:1.6rem;font-weight:600;color:var(--white);line-height:1;}
+.stat-change{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:.7rem;font-weight:500;margin-top:6px;
+}
+.stat-change.up{color:var(--green);}
+.stat-change.down{color:var(--red);}
+.stat-change-label{color:var(--muted);font-weight:400;margin-left:2px;}
+
+/* ── CHARTS ROW ── */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px;}
+.card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:22px;
+}
+.card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.card-title{font-size:.85rem;font-weight:600;color:var(--white);}
+.card-sub{font-size:.72rem;color:var(--muted);margin-top:2px;}
+.card-badge{
+  font-size:.65rem;font-weight:500;
+  padding:3px 10px;border-radius:20px;
+  background:rgba(34,197,94,.1);color:var(--green);
+}
+
+/* Bar chart */
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:140px;margin-bottom:12px;}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.bar{
+  width:100%;border-radius:4px 4px 0 0;
+  background:var(--bg3);
+  transition:background .2s;
+  cursor:pointer;
+  position:relative;
+}
+.bar.active{background:var(--blue);}
+.bar:hover{background:var(--blue2);}
+.bar-label{font-size:.62rem;color:var(--muted);}
+
+/* Donut chart */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;}
+.donut{position:relative;width:120px;height:120px;}
+.donut svg{transform:rotate(-90deg);}
+.donut-center{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.donut-num{font-size:1.3rem;font-weight:600;color:var(--white);}
+.donut-label{font-size:.62rem;color:var(--muted);}
+.donut-legend{width:100%;}
+.legend-item{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.legend-left{display:flex;align-items:center;gap:8px;}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.legend-name{font-size:.75rem;color:var(--white2);}
+.legend-val{font-size:.75rem;font-weight:600;color:var(--white);}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead th{
+  text-align:left;
+  font-size:.65rem;font-weight:500;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);
+  padding:10px 16px;
+  border-bottom:1px solid var(--border);
+}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+tbody tr:hover{background:rgba(255,255,255,.02);}
+tbody tr:last-child{border-bottom:none;}
+td{padding:13px 16px;font-size:.8rem;color:var(--white2);}
+td:first-child{color:var(--white);font-weight:500;}
+.status-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.68rem;font-weight:500;
+  padding:3px 10px;border-radius:20px;
+}
+.status-badge.success{background:rgba(34,197,94,.1);color:var(--green);}
+.status-badge.pending{background:rgba(245,158,11,.1);color:var(--yellow);}
+.status-badge.failed{background:rgba(239,68,68,.1);color:var(--red);}
+.status-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .sidebar{display:none;}
+  .main{margin-left:0;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .charts-row{grid-template-columns:1fr;}
+  .content{padding:20px 16px;}
+  .topbar{padding:14px 16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span>Arcen</span>
+    <small>Analytics</small>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-label">Main</span>
+    <a class="nav-item active">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Overview
+    </a>
+    <a class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Analytics
+    </a>
+    <a class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Reports
+      <span class="nav-badge">3</span>
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-label">Manage</span>
+    <a class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Users
+    </a>
+    <a class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Projects
+    </a>
+    <a class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Messages
+      <span class="nav-badge">12</span>
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-label">System</span>
+    <a class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 0 4.93 19.07M19.07 4.93l-14.14 14.14"/></svg>
+      Security
+    </a>
+    <a class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      Settings
+    </a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-row">
+      <div class="user-avatar">L</div>
+      <div>
+        <div class="user-name">Leo</div>
+        <div class="user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Overview</h1>
+      <p>Wednesday, June 10, 2025</p>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Last 30 days
+      </button>
+      <button class="topbar-btn">Export</button>
+      <button class="topbar-btn btn-primary">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Report
+      </button>
+      <div class="notif-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="notif-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">Total Revenue</span>
+          <div class="stat-icon" style="background:rgba(79,124,255,.12);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4f7cff" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+        </div>
+        <div class="stat-num">$84,320</div>
+        <div class="stat-change up">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          +12.5%
+          <span class="stat-change-label">vs last month</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">Active Users</span>
+          <div class="stat-icon" style="background:rgba(168,85,247,.12);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+        </div>
+        <div class="stat-num">2,841</div>
+        <div class="stat-change up">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          +8.2%
+          <span class="stat-change-label">vs last month</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">Conversion Rate</span>
+          <div class="stat-icon" style="background:rgba(34,197,94,.12);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+        </div>
+        <div class="stat-num">3.6%</div>
+        <div class="stat-change down">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          -0.4%
+          <span class="stat-change-label">vs last month</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">Avg. Session</span>
+          <div class="stat-icon" style="background:rgba(245,158,11,.12);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+        </div>
+        <div class="stat-num">4m 32s</div>
+        <div class="stat-change up">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          +1.1%
+          <span class="stat-change-label">vs last month</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts-row">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Revenue Overview</div>
+            <div class="card-sub">Monthly performance</div>
+          </div>
+          <span class="card-badge">+12.5% this month</span>
+        </div>
+        <div class="bar-chart" id="barChart"></div>
+        <div style="display:flex;gap:16px;">
+          <span style="font-size:.68rem;color:var(--muted);">Jan</span>
+          <span style="font-size:.68rem;color:var(--muted);">Feb</span>
+          <span style="font-size:.68rem;color:var(--muted);">Mar</span>
+          <span style="font-size:.68rem;color:var(--muted);">Apr</span>
+          <span style="font-size:.68rem;color:var(--muted);">May</span>
+          <span style="font-size:.68rem;color:var(--muted);">Jun</span>
+          <span style="font-size:.68rem;color:var(--muted);">Jul</span>
+          <span style="font-size:.68rem;color:var(--muted);">Aug</span>
+          <span style="font-size:.68rem;color:var(--muted);">Sep</span>
+          <span style="font-size:.68rem;color:var(--muted);">Oct</span>
+          <span style="font-size:.68rem;color:var(--muted);">Nov</span>
+          <span style="font-size:.68rem;color:var(--muted);font-weight:600;color:#fff;">Dec</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Traffic Sources</div>
+            <div class="card-sub">This month</div>
+          </div>
+        </div>
+        <div class="donut-wrap">
+          <div class="donut">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--bg3)" stroke-width="14"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--blue)" stroke-width="14" stroke-dasharray="180 121" stroke-dashoffset="0"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--purple)" stroke-width="14" stroke-dasharray="80 221" stroke-dashoffset="-180"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--green)" stroke-width="14" stroke-dasharray="42 259" stroke-dashoffset="-260"/>
+            </svg>
+            <div class="donut-center">
+              <span class="donut-num">2.8k</span>
+              <span class="donut-label">Total</span>
+            </div>
+          </div>
+          <div class="donut-legend" style="width:100%;">
+            <div class="legend-item">
+              <div class="legend-left"><div class="legend-dot" style="background:var(--blue)"></div><span class="legend-name">Organic</span></div>
+              <span class="legend-val">60%</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-left"><div class="legend-dot" style="background:var(--purple)"></div><span class="legend-name">Referral</span></div>
+              <span class="legend-val">26%</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-left"><div class="legend-dot" style="background:var(--green)"></div><span class="legend-name">Direct</span></div>
+              <span class="legend-val">14%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Recent Transactions</div>
+          <div class="card-sub">Last 5 transactions</div>
+        </div>
+        <button class="topbar-btn" style="font-size:.7rem;padding:6px 14px;">View All</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Project</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Mira Brands</td><td>E-Commerce Redesign</td><td>$4,200</td><td>Jun 8, 2025</td><td><span class="status-badge success"><span class="status-dot"></span>Paid</span></td></tr>
+            <tr><td>Halo Studio</td><td>Landing Page</td><td>$1,800</td><td>Jun 6, 2025</td><td><span class="status-badge success"><span class="status-dot"></span>Paid</span></td></tr>
+            <tr><td>Nexon Corp</td><td>Dashboard UI</td><td>$6,500</td><td>Jun 4, 2025</td><td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td></tr>
+            <tr><td>Velo Agency</td><td>WordPress Build</td><td>$3,100</td><td>Jun 2, 2025</td><td><span class="status-badge success"><span class="status-dot"></span>Paid</span></td></tr>
+            <tr><td>Orion Tech</td><td>SEO Audit</td><td>$950</td><td>May 30, 2025</td><td><span class="status-badge failed"><span class="status-dot"></span>Cancelled</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Bar chart
+const data = [42,58,35,71,63,80,55,68,74,60,85,92];
+const chart = document.getElementById('barChart');
+const max = Math.max(...data);
+data.forEach((v,i) => {
+  const wrap = document.createElement('div');
+  wrap.className = 'bar-wrap';
+  const bar = document.createElement('div');
+  bar.className = 'bar' + (i === data.length-1 ? ' active' : '');
+  bar.style.height = (v/max*100)+'%';
+  wrap.appendChild(bar);
+  chart.appendChild(wrap);
+});
+</script>
+</body>
+</html>
